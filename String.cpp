@@ -43,7 +43,7 @@ size_t String::find(String str, size_t pos) {
 		while (sym[i] == str.sym[j] && j < str.size) {
 			++i; ++j;
 		}
-		if (j == str.size - 1) {
+		if (j == str.size) {
 			return i - j;
 		}
 		++i;
@@ -52,11 +52,12 @@ size_t String::find(String str, size_t pos) {
 
 void String::change(String str1, String str2) {
 	size_t first_end = this->find(str1);
-	size_t arr_size = this->count_word(str1);
+	size_t arr_size = this->count_word(str1)+1;
 	String* arr = new String[arr_size];
-	arr = this->split();
+	arr = this->split(*str1.sym);
 	this->clean();
-	for (int i = 0; i < arr_size-1; ++i) {
+	arr->print_arr(arr_size);
+	for (int i = 0; i < arr_size; ++i) {
 		this->append(arr[i]);
 		this->append(str2);
 	}this->append(arr[arr_size-1]);
@@ -76,7 +77,7 @@ size_t String::count_word(String str, size_t pos) {
 		while (sym[i] == str.sym[j] && j < str.size) {
 			++i; ++j;
 		}
-		if (j == str.size - 1) {
+		if (j == str.size) {
 			count++;
 		}
 		++i;
@@ -88,8 +89,19 @@ void String::print() {
 	std::cout << sym << std::endl;
 }
 
-void String::print_arr() {
-	for (int i = 0; i < 3; i++) {
+void String::print_arr(size_t size) {
+	for (int i = 0; i < size; i++) {
 		std::cout << this[i].sym << std::endl;
 	}
+}
+
+String String::substr(size_t begin, size_t end) {
+	char* ch = new char[end - begin + 1];
+	size_t j = 0;
+		for(int i = begin; i < end; ++i){
+			ch[j] = this->sym[i];
+			j++;
+		}ch[j] = '\0';
+		String result(ch);
+	return result;
 }
