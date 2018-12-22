@@ -30,12 +30,44 @@ String* String::split(const char delim) {
 		for (int k = 0; k < count - 1; k++) {
 			p_arr[k] = tmp_arr[k];
 		}delete[] tmp_arr;
-		p_arr[count-1].sym = word;
-		p_arr[count - 1].size = j+1;
+		p_arr[count - 1].sym = word;
+		p_arr[count - 1].size = j + 1;
 		i++;
 	}
 	return p_arr;
 }
+
+//String* String::split(const char* delim) {
+//	size_t count = 0;
+//	int i = 0;
+//	String* p_arr = new String[count];
+//	while (i < size) {
+//		char* word = new char;
+//		int j = 0, count_del = 0;
+//		while (sym[i] != delim[j] && i < size) {
+//			for (int k = i; k < i + strlen(delim); k++) {
+//				if (sym[k] == delim[i - k]) {
+//					count_del++;
+//				}
+//			}
+//			if (count_del == strlen(delim)) {
+//				break;
+//			}
+//			word[j] = sym[i];
+//			j++; i++;
+//		}word[j] = '\0';
+//		count++;
+//		String* tmp_arr = p_arr;
+//		p_arr = new String[count];
+//		for (int k = 0; k < count - 1; k++) {
+//			p_arr[k] = tmp_arr[k];
+//		}delete[] tmp_arr;
+//		p_arr[count-1].sym = word;
+//		p_arr[count - 1].size = j+1;
+//		i++;
+//	}
+//	return p_arr;
+//}
 
 size_t String::find(String str, size_t pos) {
 	int i = pos, j = 0;
@@ -43,8 +75,11 @@ size_t String::find(String str, size_t pos) {
 		while (sym[i] == str.sym[j] && j < str.size) {
 			++i; ++j;
 		}
-		if (j == str.size) {
+		if ((str.sym[j] != '\0' && j == str.size-1) || (str.sym[j] == '\0' && j == str.size-1)) {
 			return i - j;
+		}
+		else {
+			j = 0;
 		}
 		++i;
 	}
@@ -54,9 +89,9 @@ void String::change(String str1, String str2) {
 	size_t first_end = this->find(str1);
 	size_t arr_size = this->count_word(str1)+1;
 	String* arr = new String[arr_size];
-	arr = this->split(*str1.sym);
-	this->clean();
+	arr = this->split(*str1.sym);	//or do split(char), it doesnt split
 	arr->print_arr(arr_size);
+	this->clean();
 	for (int i = 0; i < arr_size; ++i) {
 		this->append(arr[i]);
 		this->append(str2);
@@ -90,7 +125,7 @@ void String::print() {
 }
 
 void String::print_arr(size_t size) {
-	for (int i = 0; i < size; i++) {
+	for (int i = 0; i <= size; i++) {
 		std::cout << this[i].sym << std::endl;
 	}
 }
