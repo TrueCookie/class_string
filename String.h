@@ -18,7 +18,7 @@ public:
 	}
 
 	void append(String);
-	String* split(const char delim = ' ');
+	String* split(const char*);
 	size_t find(String str, size_t pos = 0);
 	void change(String str1, String str2);
 	String substr(size_t begin, size_t end);
