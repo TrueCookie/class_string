@@ -17,8 +17,8 @@ int main() {
 	std::cout << how.find(work) << std::endl;
 
 	String who("I might be a sinner");
-	who.substr(2, 7).print();
-	who.change("sinner", "saint");
+	//who.substr(2, 5).print();
+	who.format("sinner", "saint");
 	who.print();
 
 	_getch();

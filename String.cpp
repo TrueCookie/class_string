@@ -118,19 +118,39 @@ size_t String::find(String str, size_t pos) {
 	}
 }
 
-void String::change(String str1, String str2) {
-	size_t first_end = this->find(str1);
-	size_t arr_size = this->count_word(str1)+1;
+//void String::change(String str1, String str2) {
+//	size_t first_end = this->find(str1);
+//	size_t arr_size = this->count_word(str1)+1;
+//	String* arr = new String[arr_size];
+//	arr = this->split(str1.sym);	//or do split(char), it doesnt split
+//	arr->print_arr(arr_size);
+//	this->clean();
+//	for (int i = 0; i < arr_size; ++i) {
+//		this->append(arr[i]);
+//		this->append(str2);
+//	}this->append(arr[arr_size-1]);
+//	size = this->size;
+//	sym = this->sym;
+//}
+
+void String::format(String str1, String str2) {
+	size_t arr_size = this->count_word(str1);
 	String* arr = new String[arr_size];
-	arr = this->split(str1.sym);	//or do split(char), it doesnt split
-	arr->print_arr(arr_size);
-	this->clean();
-	for (int i = 0; i < arr_size; ++i) {
-		this->append(arr[i]);
-		this->append(str2);
-	}this->append(arr[arr_size-1]);
-	size = this->size;
-	sym = this->sym;
+	char* delim = str1.to_char();
+	arr = this->split(delim);	//split string
+	
+	String result;
+	if (substr(0, str1.size) == str1) {
+		result.append(str2);
+	}
+	for (int i = 0; i < arr_size-1; ++i) {	//TODO: add case str1 in the begin and in the end of string
+		result.append(arr[i]);
+		result.append(str2);
+	}result.append(arr[arr_size - 1]);
+	if (substr(size - str1.size, str1.size) == str1) {
+		result.append(str2);
+	}
+	*this = result;
 }
 
 void String::clean() {
@@ -174,3 +194,12 @@ String String::substr(size_t begin, size_t count) {
 		String result(ch);
 	return result;
 }
+
+char* String::to_char() {
+	char* result = new char[size];
+	for (int i = 0; i < size; ++i) {	//копируем в новую строку исходную
+		result[i] = sym[i];
+	}
+	return result;
+}
+
