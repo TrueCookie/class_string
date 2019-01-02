@@ -18,14 +18,28 @@ String* String::split(const char* delim) {
 	size_t arr_size = source.count_word(delim) + 1;
 	String* arr = new String[arr_size];
 	size_t arr_count = 0;
-	for (int i = 0; i < source.size; ++i) {
+	int begin = 0;
+	int n = 0, m = 0;
+	while (source.sym[n] == delim[m]) {
+		++n; ++m;
+	}
+	if (m == strlen(delim)) {
+		begin = m;	//if the first word is delim
+	}
+	int i = begin;
+	int prev_begin = begin;
+	while(i < source.size) {
 		int j = 0;
 		while (source.sym[i] == delim[j]) {
 			++i; ++j;
 		}
 		if(j == strlen(delim)){
-			arr[arr_count] = source.substr(i - j, j);
+			arr[arr_count] = source.substr(prev_begin, i-j-prev_begin);	//from prev wordend to i
 			arr_count++;
+			prev_begin = i;
+		}
+		if (i == source.size - 1) {	//cut the last word
+			arr[arr_count] = source.substr(prev_begin, i - prev_begin);
 		}
 		++i;
 	}
@@ -132,7 +146,7 @@ size_t String::count_word(String str, size_t pos) {
 		while (sym[i] == str.sym[j] && j < str.size) {
 			++i; ++j;
 		}
-		if (j == str.size) {
+		if (j == str.size - 1) {
 			count++;
 		}
 		++i;
@@ -145,7 +159,7 @@ void String::print() {
 }
 
 void String::print_arr(size_t size) {
-	for (int i = 0; i <= size; i++) {
+	for (int i = 0; i < size; i++) {
 		std::cout << this[i].sym << std::endl;
 	}
 }
