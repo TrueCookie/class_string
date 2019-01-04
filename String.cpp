@@ -14,33 +14,55 @@ void String::append(String str) {
 }
 
 String* String::split(const char* delim) {
+
+	bool begin_flag = false, end_flag = false;
+	if (substr(0, strlen(delim)).sym == delim) {	//check delim at the begin
+		begin_flag = true;
+	}
+	if (substr(size - strlen(delim) - 1, strlen(delim)) == delim) {	//check delim at the end
+		end_flag = true;
+	}
+	size_t arr_size;
+	if (begin_flag || end_flag) {			//define size of array
+		arr_size = this->count_word(delim);
+	}
+	else if (!begin_flag && !end_flag) {
+		arr_size = this->count_word(delim) + 1;
+	}
+	else if (begin_flag && end_flag) {
+		arr_size = this->count_word(delim) - 1;
+	}
+
 	String source = *this;
-	size_t arr_size = source.count_word(delim) + 1;
 	String* arr = new String[arr_size];
 	size_t arr_count = 0;
-	int begin = 0;
+	int i = 0;
+	int prev_begin = 0;
 	int n = 0, m = 0;
-	while (source.sym[n] == delim[m]) {
-		++n; ++m;
-	}
-	if (m == strlen(delim)) {
-		begin = m;	//if the first word is delim
-	}
-	int i = begin;
-	int prev_begin = begin;
-	while(i < source.size) {
-		int j = 0;
-		while (source.sym[i] == delim[j]) {
-			++i; ++j;
-		}
-		if(j == strlen(delim)){
-			arr[arr_count] = source.substr(prev_begin, i-j-prev_begin);	//from prev wordend to i
-			arr_count++;
+	//if (begin_flag) {
+	//	i = strlen(delim);	//if the first word is delim
+	//	prev_begin = i;
+	//}
+	
+	while(i < source.size - strlen(delim) + 1) {
+		if (strcmp((source.substr(i, strlen(delim))).sym, delim)) {
+			arr[arr_count] = source.substr(prev_begin, i - prev_begin);
+			i += strlen(delim);
 			prev_begin = i;
 		}
-		if (i == source.size - 1) {	//cut the last word
-			arr[arr_count] = source.substr(prev_begin, i - prev_begin);
-		}
+
+		//int j = 0;
+		//while (source.sym[i] == delim[j]) {
+		//	++i; ++j;
+		//}
+		//if(j == strlen(delim)){
+		//	arr[arr_count] = source.substr(prev_begin, i-j-prev_begin);	//from prev wordend to i
+		//	arr_count++;
+		//	prev_begin = i;
+		//}
+		//if (i == source.size - 1) {	//cut the last word		//why
+		//	arr[arr_count] = source.substr(prev_begin, i - prev_begin);
+		//}
 		++i;
 	}
 	return arr;
@@ -134,20 +156,33 @@ size_t String::find(String str, size_t pos) {
 //}
 
 void String::format(String str1, String str2) {
-	size_t arr_size = this->count_word(str1);
+	String result;
+	bool begin_flag = false, end_flag = false;
+	if (substr(0, str1.size) == str1) {	//check str1 at the begin
+		begin_flag = true;
+		result.append(str2);
+	}
+	if (substr(size - str1.size - 1, str1.size) == str1) {	//check str1 at the end
+		end_flag = true;
+	}
+	size_t arr_size;
+	if (begin_flag || end_flag) {
+		arr_size = this->count_word(str1);
+	}else if (!begin_flag && !end_flag) {
+		arr_size = this->count_word(str1) + 1;
+	}else if (begin_flag && end_flag) {
+		arr_size = this->count_word(str1) - 1;
+	}
 	String* arr = new String[arr_size];
 	char* delim = str1.to_char();
 	arr = this->split(delim);	//split string
-	
-	String result;
-	if (substr(0, str1.size) == str1) {
-		result.append(str2);
-	}
-	for (int i = 0; i < arr_size-1; ++i) {	//TODO: add case str1 in the begin and in the end of string
+
+	for (int i = 0; i < arr_size-1; ++i) {	//is this right???????????
 		result.append(arr[i]);
 		result.append(str2);
 	}result.append(arr[arr_size - 1]);
-	if (substr(size - str1.size, str1.size) == str1) {
+	
+	if (end_flag) {	//add last delim
 		result.append(str2);
 	}
 	*this = result;
@@ -163,7 +198,7 @@ size_t String::count_word(String str, size_t pos) {
 	int i = pos, count = 0;
 	while (i < size) {
 		int j = 0;
-		while (sym[i] == str.sym[j] && j < str.size) {
+		while (sym[i] == str.sym[j] && j < str.size - 1) {
 			++i; ++j;
 		}
 		if (j == str.size - 1) {
