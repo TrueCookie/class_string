@@ -1,16 +1,24 @@
 #include "String.h"
 
 void String::append(String str) {
-	char* sym2 = new char[this->size + str.size - 1];	//размер суммы исходной и доп строки
-	for (int i = 0; i < this->size; ++i) {	//копируем в новую строку исходную
-		sym2[i] = this->sym[i];
+	size_t res_size;
+	if (this->size != 0) {
+		res_size = this->size + str.size - 1;
+		char* sym2 = new char[res_size];	//размер суммы исходной и доп строки
+		for (int i = 0; i < this->size - 1; ++i) {	//копируем в новую строку исходную
+			sym2[i] = this->sym[i];
+		}
+		for (int i = this->size - 1; i < this->size + str.size - 1; ++i) {	//добавляем в новую строку дополнительную
+			sym2[i] = str.sym[i - (this->size) + 1];
+		}
+		delete[] sym;
+		this->sym = sym2;
+		this->size = this->size + str.size - 1;
+	}else {
+		delete[] sym;
+		this->sym = str.sym;
+		this->size = str.size;
 	}
-	for (int i = this->size-1; i < this->size + str.size-1; ++i) {	//добавляем в новую строку дополнительную
-		sym2[i] = str.sym[i-(this->size)+1];
-	}
-	delete[] sym;
-	this->sym = sym2;
-	this->size = this->size + str.size - 1;
 }
 
 String* String::split(const char* delim) {
@@ -167,11 +175,11 @@ void String::format(String str1, String str2) {
 		begin_flag = true;
 		result.append(str2);
 	}
-	if (substr(size - str1.size - 1, str1.size) == str1) {	//check str1 at the end
+	if (substr(size - str1.size, str1.size) == str1) {	//check str1 at the end
 		end_flag = true;
 	}
 	size_t arr_size;
-	if (begin_flag || end_flag) {
+	if (begin_flag ^ end_flag) {
 		arr_size = this->count_word(str1);
 	}else if (!begin_flag && !end_flag) {
 		arr_size = this->count_word(str1) + 1;
@@ -182,14 +190,16 @@ void String::format(String str1, String str2) {
 	char* delim = str1.to_char();
 	arr = this->split(delim);	//split string
 
-	for (int i = 0; i < arr_size-1; ++i) {	//is this right???????????
+	for (int i = 0; i < arr_size; ++i) {	//is this right???????????
 		result.append(arr[i]);
 		result.append(str2);
-	}result.append(arr[arr_size - 1]);
-	
-	if (end_flag) {	//add last delim
-		result.append(str2);
 	}
+	if (!end_flag) {
+		result.append(arr[arr_size - 1]);
+	}
+	//if (end_flag) {	//add last delim
+	//	result.append(str2);
+	//}
 	*this = result;
 }
 

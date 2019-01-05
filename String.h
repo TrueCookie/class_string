@@ -34,7 +34,7 @@ public:
 		while(sym[i] == str.sym[i] && i < size){
 			++i;
 		}
-		return i == (size - 1);
+		return i == size;
 	}
 
 };

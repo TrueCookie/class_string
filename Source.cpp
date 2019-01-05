@@ -18,7 +18,7 @@ int main() {
 	std::cout << "split check: "; arr->print_arr(arr_size);
 
 	String who("I might be a sinner");
-	//who.substr(2, 5).print();
+	who.substr(2, 5).print();
 	who.format("sinner", "saint");
 	who.print();
 
