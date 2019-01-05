@@ -4,11 +4,11 @@ void String::append(String str) {
 	size_t res_size;
 	if (this->size != 0) {
 		res_size = this->size + str.size - 1;
-		char* sym2 = new char[res_size];	//размер суммы исходной и доп строки
-		for (int i = 0; i < this->size - 1; ++i) {	//копируем в новую строку исходную
+		char* sym2 = new char[res_size];
+		for (int i = 0; i < this->size - 1; ++i) {	//copy source str to the new
 			sym2[i] = this->sym[i];
 		}
-		for (int i = this->size - 1; i < this->size + str.size - 1; ++i) {	//добавляем в новую строку дополнительную
+		for (int i = this->size - 1; i < this->size + str.size - 1; ++i) {	//add the str into the new str
 			sym2[i] = str.sym[i - (this->size) + 1];
 		}
 		delete[] sym;
@@ -59,19 +59,6 @@ String* String::split(const char* delim) {
 			i += strlen(delim) - 1;
 			prev_begin = i+1;
 		}
-
-		//int j = 0;
-		//while (source.sym[i] == delim[j]) {
-		//	++i; ++j;
-		//}
-		//if(j == strlen(delim)){
-		//	arr[arr_count] = source.substr(prev_begin, i-j-prev_begin);	//from prev wordend to i
-		//	arr_count++;
-		//	prev_begin = i;
-		//}
-		//if (i == source.size - 1) {	
-		//	arr[arr_count] = source.substr(prev_begin, i - prev_begin);
-		//}
 		++i;
 	}
 	if (!end_flag) { 
@@ -80,62 +67,6 @@ String* String::split(const char* delim) {
 
 	return arr;
 }
-
-//String* String::split(const char delim) {
-//	size_t count = 0;
-//	int i = 0;
-//	String* p_arr = new String[count];
-//	while (i < size) {
-//		char* word = new char;
-//		int j = 0;
-//		while (sym[i] != delim && i < size) {
-//			word[j] = sym[i];
-//			j++; i++;
-//		}word[j] = '\0';
-//		count++;
-//		String* tmp_arr = p_arr;
-//		p_arr = new String[count];
-//		for (int k = 0; k < count - 1; k++) {
-//			p_arr[k] = tmp_arr[k];
-//		}delete[] tmp_arr;
-//		p_arr[count - 1].sym = word;
-//		p_arr[count - 1].size = j + 1;
-//		i++;
-//	}
-//	return p_arr;
-//}
-
-//String* String::split(const char* delim) {
-//	size_t count = 0;
-//	int i = 0;
-//	String* p_arr = new String[count];
-//	while (i < size) {
-//		char* word = new char;
-//		int j = 0, count_del = 0;
-//		while (sym[i] != delim[j] && i < size) {
-//			for (int k = i; k < i + strlen(delim); k++) {
-//				if (sym[k] == delim[i - k]) {
-//					count_del++;
-//				}
-//			}
-//			if (count_del == strlen(delim)) {
-//				break;
-//			}
-//			word[j] = sym[i];
-//			j++; i++;
-//		}word[j] = '\0';
-//		count++;
-//		String* tmp_arr = p_arr;
-//		p_arr = new String[count];
-//		for (int k = 0; k < count - 1; k++) {
-//			p_arr[k] = tmp_arr[k];
-//		}delete[] tmp_arr;
-//		p_arr[count-1].sym = word;
-//		p_arr[count - 1].size = j+1;
-//		i++;
-//	}
-//	return p_arr;
-//}
 
 size_t String::find(String str, size_t pos) {
 	int i = pos, j = 0;
@@ -153,27 +84,11 @@ size_t String::find(String str, size_t pos) {
 	}
 }
 
-//void String::change(String str1, String str2) {
-//	size_t first_end = this->find(str1);
-//	size_t arr_size = this->count_word(str1)+1;
-//	String* arr = new String[arr_size];
-//	arr = this->split(str1.sym);	//or do split(char), it doesnt split
-//	arr->print_arr(arr_size);
-//	this->clean();
-//	for (int i = 0; i < arr_size; ++i) {
-//		this->append(arr[i]);
-//		this->append(str2);
-//	}this->append(arr[arr_size-1]);
-//	size = this->size;
-//	sym = this->sym;
-//}
-
 void String::format(String str1, String str2) {
 	String result;
 	bool begin_flag = false, end_flag = false;
 	if (substr(0, str1.size - 1) == str1) {	//check str1 at the begin
 		begin_flag = true;
-		//result.append(str2);
 	}
 	if (substr(size - str1.size, str1.size) == str1) {	//check str1 at the end
 		end_flag = true;
@@ -208,11 +123,6 @@ void String::format(String str1, String str2) {
 			result.append(arr[i]);
 		}
 	}
-	
-	
-	//if (end_flag) {	//add last delim
-	//	result.append(str2);
-	//}
 	*this = result;
 }
 
@@ -260,7 +170,7 @@ String String::substr(size_t begin, size_t count) {
 
 char* String::to_char() {
 	char* result = new char[size];
-	for (int i = 0; i < size; ++i) {	//копируем в новую строку исходную
+	for (int i = 0; i < size; ++i) {
 		result[i] = sym[i];
 	}
 	return result;

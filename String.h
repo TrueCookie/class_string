@@ -1,4 +1,3 @@
-#pragma once
 #include <iostream>
 class  String {
 private:
@@ -12,7 +11,7 @@ public:
 	String(const char* str) {
 		size = strlen(str) + 1;
 		sym = new char[size];
-		for (int i = 0; i < size; ++i) {	//копируем в новую строку исходную
+		for (int i = 0; i < size; ++i) {
 			sym[i] = str[i];
 		}
 	}
