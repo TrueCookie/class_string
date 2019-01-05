@@ -22,6 +22,13 @@ int main() {
 	who.format("sinner", "saint");
 	who.print();
 
+	who.format("I", "You");
+	who.print();
+
+	how.format(" ", "_");
+	how.print();
+
+
 	_getch();
 	return 0;
 }

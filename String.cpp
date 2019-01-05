@@ -171,9 +171,9 @@ size_t String::find(String str, size_t pos) {
 void String::format(String str1, String str2) {
 	String result;
 	bool begin_flag = false, end_flag = false;
-	if (substr(0, str1.size) == str1) {	//check str1 at the begin
+	if (substr(0, str1.size - 1) == str1) {	//check str1 at the begin
 		begin_flag = true;
-		result.append(str2);
+		//result.append(str2);
 	}
 	if (substr(size - str1.size, str1.size) == str1) {	//check str1 at the end
 		end_flag = true;
@@ -190,13 +190,26 @@ void String::format(String str1, String str2) {
 	char* delim = str1.to_char();
 	arr = this->split(delim);	//split string
 
-	for (int i = 0; i < arr_size; ++i) {	//is this right???????????
-		result.append(arr[i]);
-		result.append(str2);
+	if (!begin_flag) {
+		for (int i = 0; i < arr_size-1; ++i) {
+			result.append(arr[i]);
+			result.append(str2);
+		}
+		if (end_flag) {
+			result.append(arr[arr_size - 1]);
+			result.append(str2);
+		}else {
+			result.append(arr[arr_size - 1]);
+		}
 	}
-	if (!end_flag) {
-		result.append(arr[arr_size - 1]);
+	else if (begin_flag) {
+		for (int i = 0; i < arr_size; ++i) {
+			result.append(str2);
+			result.append(arr[i]);
+		}
 	}
+	
+	
 	//if (end_flag) {	//add last delim
 	//	result.append(str2);
 	//}
