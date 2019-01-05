@@ -16,14 +16,14 @@ void String::append(String str) {
 String* String::split(const char* delim) {
 
 	bool begin_flag = false, end_flag = false;
-	if (substr(0, strlen(delim)).sym == delim) {	//check delim at the begin
+	if (!strcmp(substr(0, strlen(delim)).sym, delim)) {	//check delim at the begin
 		begin_flag = true;
 	}
-	if (substr(size - strlen(delim) - 1, strlen(delim)) == delim) {	//check delim at the end
+	if (!strcmp(substr(size - strlen(delim) - 1, strlen(delim)).sym,delim)) {	//check delim at the end
 		end_flag = true;
 	}
 	size_t arr_size;
-	if (begin_flag || end_flag) {			//define size of array
+	if (begin_flag^end_flag) {			//define size of array
 		arr_size = this->count_word(delim);
 	}
 	else if (!begin_flag && !end_flag) {
@@ -39,16 +39,17 @@ String* String::split(const char* delim) {
 	int i = 0;
 	int prev_begin = 0;
 	int n = 0, m = 0;
-	//if (begin_flag) {
-	//	i = strlen(delim);	//if the first word is delim
-	//	prev_begin = i;
-	//}
+	if (begin_flag) {
+		i = strlen(delim);	//if the first word is delim
+		prev_begin = i;
+	}
 	
-	while(i < source.size - strlen(delim) + 1) {
-		if (strcmp((source.substr(i, strlen(delim))).sym, delim)) {
+	while(i < source.size - strlen(delim)+1) {
+		if (!strcmp((source.substr(i, strlen(delim))).sym, delim)) {
 			arr[arr_count] = source.substr(prev_begin, i - prev_begin);
-			i += strlen(delim);
-			prev_begin = i;
+			arr_count++;
+			i += strlen(delim) - 1;
+			prev_begin = i+1;
 		}
 
 		//int j = 0;
@@ -60,11 +61,15 @@ String* String::split(const char* delim) {
 		//	arr_count++;
 		//	prev_begin = i;
 		//}
-		//if (i == source.size - 1) {	//cut the last word		//why
+		//if (i == source.size - 1) {	
 		//	arr[arr_count] = source.substr(prev_begin, i - prev_begin);
 		//}
 		++i;
 	}
+	if (!end_flag) { 
+		arr[arr_count] = source.substr(prev_begin, i - prev_begin + 1); 
+	}
+
 	return arr;
 }
 
