@@ -53,16 +53,16 @@ String* String::split(const char* delim) {
 	}
 	
 	while(i < source.size - strlen(delim)+1) {
-		if (!strcmp((source.substr(i, strlen(delim))).sym, delim)) {
-			arr[arr_count] = source.substr(prev_begin, i - prev_begin);
+		if (!strcmp((source.substr(i, strlen(delim))).sym, delim)) {	//if word after i is the delim
+			arr[arr_count] = source.substr(prev_begin, i - prev_begin);	//put it to the array
 			arr_count++;
 			i += strlen(delim) - 1;
 			prev_begin = i+1;
 		}
 		++i;
 	}
-	if (!end_flag) { 
-		arr[arr_count] = source.substr(prev_begin, i - prev_begin + 1); 
+	if (!end_flag) {	//if no delim in the end of string
+		arr[arr_count] = source.substr(prev_begin, i - prev_begin + 1); //add leftover word to the end
 	}
 
 	return arr;
@@ -94,7 +94,7 @@ void String::format(String str1, String str2) {
 		end_flag = true;
 	}
 	size_t arr_size;
-	if (begin_flag ^ end_flag) {
+	if (begin_flag ^ end_flag) {	//define size of array
 		arr_size = this->count_word(str1);
 	}else if (!begin_flag && !end_flag) {
 		arr_size = this->count_word(str1) + 1;
